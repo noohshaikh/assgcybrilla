@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>URL Encoder</title>
+    </head>
+    <body>
+        <div>Enter URL:</div>
+        <div>
+            <input type="text" id="urlToEncode" style="width: 100%"/>
+        </div>
+        <div style="display: flex;">
+            <div style="margin: 5px;"><input type="button" value="Shorten" onclick="encodeURL()"/></div>
+            <div style="margin: 5px;"><input type="button" value="Clear" onclick="clearURL()"/></div>
+        </div>
+        <div>
+            Shortened URL:
+        </div>
+        <div id="urlEncoded">
+        </div>
+        <script type="text/javascript">
+            function encodeURL(){
+                var urlEncdr = document.getElementById("urlToEncode").value;
+                var urlEncd = document.getElementById("urlEncoded");
+                var xhr = new XMLHttpRequest();
+                var reqURL = "http://"+"{{hostname|safe}}"+"/redurl/encode";
+                xhr.open("POST", reqURL, true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == XMLHttpRequest.DONE) {
+                        var resp = JSON.parse(xhr.responseText);
+                        urlEncd.innerHTML = resp["urlEncoded"];
+                    }
+                }
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.send(JSON.stringify({
+                    userId: 1,
+                    url: urlEncdr
+                }));
+            }
+            
+            function clearURL(){
+                document.getElementById("urlToEncode").value = "";
+                document.getElementById("urlEncoded").innerHTML = "";
+            }
+        </script>
+    </body>
+</html>
