@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sign Up/Login</title>
+    </head>
+    <style>
+        .form { 
+            border: solid 1px black;
+            margin: 5px;
+            padding: 10px; 
+            width: max-content;
+        }
+        .form div{
+            margin: 5px;
+        }
+    </style>
+    <body>
+        <div style="display: flex; margin: 10px;">
+            <div class="form" id="loginForm" style="display: block;">
+                <div><h3>Login</h3></div>
+                <div>Email:</div>
+                <div><input type="text" id="loginUserEmail" placeholder="Enter Registered Email" style="width: 256px;"/></div>
+                <div>Password:</div>
+                <div><input type="password" id="loginUserPassword" placeholder="Password" style="width: 256px;"/></div>
+                <div style="text-align: center;">
+                    <div style="display: flex; margin: auto;">
+                        <div><input type="button" value="Log In" onclick="login()"/></div>
+                        <div><input type="button" value="Log In with Google"/></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form" id="signupForm" style="display: block; ">
+                <div><h3>Sign Up</h3></div>
+                <div>Email:</div>
+                <div><input type="text" id="signupUserEmail" placeholder="Enter Email" style="width: 256px;"/></div>
+                <div>Password:</div>
+                <div><input type="password" id="signupUserPassword" placeholder="Password" style="width: 256px;"/></div>
+                <div>Confirm Password:</div>
+                <div><input type="password" id="signupUserConfirmPassword" placeholder="Confirm Password" style="width: 256px;"/></div>
+                <div><input type="button" value="Sign Up" onclick="signup()"/></div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            function signup(){
+                var email = document.getElementById("signupUserEmail").value;
+                var passkey = document.getElementById("signupUserPassword").value;
+                var confirmPasskey = document.getElementById("signupUserConfirmPassword").value;
+                if((email == "") || (passkey == "") || (confirmPasskey == "")){
+                    alert("Please fill all the fields");
+                }else if((passkey != confirmPasskey)){
+                    alert("Passwords do not match");
+                }else{
+                    var reqURL = window.location.protocol+"//"+window.location.host+"/user/register"
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", reqURL, true);
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState == XMLHttpRequest.DONE) {
+                            var resp = JSON.parse(xhr.responseText);
+                            alert(resp["message"]);
+                            document.getElementById("signupUserEmail").value = "";
+                            document.getElementById("signupUserPassword").value = "";
+                            document.getElementById("signupUserConfirmPassword").value = "";
+                        }
+                    }
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.send(JSON.stringify({
+                        email: email,
+                        password: passkey
+                    }));
+                }
+            }
+
+            function login(){
+                var email = document.getElementById("loginUserEmail").value;
+                var passkey = document.getElementById("loginUserPassword").value;
+                
+                if((email == "") || (passkey == "")){
+                    alert("Please fill all the fields");
+                }else{
+                    var reqURL = window.location.protocol+"//"+window.location.host+"/user/login";
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", reqURL, true);
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState == XMLHttpRequest.DONE) {
+                            var resp = JSON.parse(xhr.responseText);
+                            if(resp["message"] == "Login successful"){
+                                localStorage.setItem('redurlUserId', resp["userId"]);
+                                window.location = window.location.protocol+"//"+window.location.host+"/redurl/encoder";
+                            }else{
+                                alert("Username or Password Invalid");
+                            }
+                        }
+                    }
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.send(JSON.stringify({
+                        email: email,
+                        password: passkey
+                    }));
+                }
+            }
+        </script>
+    </body>
+</html>

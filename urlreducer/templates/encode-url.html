@@ -4,6 +4,12 @@
         <title>URL Encoder</title>
     </head>
     <body>
+        <div style="display: flex;">
+            <div><h4>URL Shortener</h4></div>
+            <div>
+                <input type="button" value="Logout" onclick="logout()" style="margin-top: 20px; margin-left: 10px;"/>
+            </div>
+        </div>
         <div>Enter URL:</div>
         <div>
             <input type="text" id="urlToEncode" style="width: 100%"/>
@@ -32,7 +38,7 @@
                 }
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.send(JSON.stringify({
-                    userId: 1,
+                    userId: localStorage.getItem("redurlUserId"),
                     url: urlEncdr
                 }));
             }
@@ -40,6 +46,11 @@
             function clearURL(){
                 document.getElementById("urlToEncode").value = "";
                 document.getElementById("urlEncoded").innerHTML = "";
+            }
+
+            function logout(){
+                localStorage.removeItem("redurlUserId");
+                window.location = window.location.protocol+"//"+window.location.host;
             }
         </script>
     </body>

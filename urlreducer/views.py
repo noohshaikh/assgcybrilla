@@ -1,5 +1,4 @@
 import traceback
-import traceback
 
 from django.shortcuts import render, redirect
 
