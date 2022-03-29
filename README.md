@@ -11,6 +11,7 @@ Steps to setup and run
 `python manage.py migrate`<br>
 `python manage.py runserver`
 1. Open http://localhost:8000/redurl/encoder in your browser
+   or http://127.0.0.1:8000/redurl/encoder
 
 Video of working web app can be viewed at 
 <a href="https://drive.google.com/file/d/1UZkmk7k5flS6_RTDi-iagdbgXAGBEQkM/view?usp=sharing">Demo Video</a>
